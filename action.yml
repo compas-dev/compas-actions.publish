@@ -13,6 +13,10 @@ inputs:
     description: 'the PYPI account token'
     required: false
     default: ''
+  build_ghpython_components:
+    description: 'Whether to build gh_python components'
+    required: false
+    default: 'false'
 
 runs:
   using: "composite"
@@ -43,6 +47,13 @@ runs:
         body: ${{ steps.changelog_reader.outputs.changes }}
         draft: false
         prerelease: false
+    
+    - uses: compas-dev/compas-actions.build@v2
+      if: inputs.build_ghpython_components == 'true'
+      with:
+        test_lint: true
+        test_compas: true
+        build_ghpython_components: true
 
     - shell: bash
       if: inputs.publish_to_pypi == 'true'
