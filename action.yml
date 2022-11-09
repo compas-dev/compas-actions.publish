@@ -38,6 +38,7 @@ runs:
       shell: bash
 
     - name: Get Changelog Entry
+      if: inputs.create_release == 'true'
       id: changelog_reader
       uses: mindsers/changelog-reader-action@v2
       with:
