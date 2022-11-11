@@ -48,15 +48,10 @@ runs:
     - name: Create Release
       if: inputs.create_release == 'true'
       id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
         body: ${{ steps.changelog_reader.outputs.changes }}
-        draft: false
-        prerelease: false
+        token: ${{ inputs.github_token }}
 
     - if: inputs.build_ghpython_components == 'true'
       uses: compas-dev/compas-actions.build@v2
