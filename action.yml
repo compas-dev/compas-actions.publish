@@ -22,9 +22,13 @@ inputs:
     required: false
     default: 'true'
   python:
-    description: "which python version to build with"
+    description: 'which python version to build with'
     required: false
-    default: "3.10"
+    default: '3.10'
+  release_name_prefix:
+    description: 'Add prefix in front of the version number, for example COMPAS 1.0.0, v is omitted'
+    required: false
+    default: ''
 
 runs:
   using: "composite"
@@ -52,6 +56,7 @@ runs:
       with:
         body: ${{ steps.changelog_reader.outputs.changes }}
         token: ${{ inputs.github_token }}
+        name: ${{ inputs.release_name_prefix == '' && github.ref_name || inputs.release_name_prefix + ' ' + steps.tag_name.outputs.current_version }}
 
     - if: inputs.build_ghpython_components == 'true'
       uses: compas-dev/compas-actions.build@v3
