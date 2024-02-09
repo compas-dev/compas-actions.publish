@@ -104,7 +104,7 @@ runs:
           python setup.py bdist_wheel
         fi
         twine check dist/*
-        twine upload dist/* --skip-existing
+        twine upload dist/* --skip-existing --verbose
       env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ inputs.pypi_token }}
