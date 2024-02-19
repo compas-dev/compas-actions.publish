@@ -14,9 +14,24 @@ inputs:
     required: false
     default: ''
   build_ghpython_components:
-    description: 'Whether to build gh_python components'
+    description: 'Whether to build Grasshopper components'
     required: false
     default: 'false'
+  gh_source:
+    description: "The source path to build Grasshopper components"
+    required: false
+    default: "src/compas_ghpython/components"
+  gh_target:
+    description: "The target path to build Grasshopper components"
+    required: false
+    default: "src/compas_ghpython/components/ghuser"
+  gh_prefix:
+    description: "optional prefix added to the name of each generated Grasshopper component"
+    required: false
+  gh_interpreter:
+    description: "interpreter used to build Grasshopper components, either 'ironpython' or 'cpython'. Defaults to 'ironpython'"
+    required: false
+    default: "ironpython"
   create_release:
     description: 'Whether to create a release on the repo'
     required: false
@@ -84,6 +99,10 @@ runs:
         invoke_lint: true
         check_import: true
         build_ghpython_components: true
+        gh_source: ${{ inputs.gh_source }}
+        gh_target: ${{ inputs.gh_target }}
+        gh_prefix: ${{ inputs.gh_prefix }}
+        gh_interpreter: ${{ inputs.gh_interpreter }}
         python: ${{ inputs.python }}
       
     - if: inputs.build_ghpython_components == 'false'
