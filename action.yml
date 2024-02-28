@@ -45,11 +45,11 @@ inputs:
     required: false
     default: ''
   sdist:
-    description: 'Whether to create Source Distribution for this package using the sdist flag for setup.py'
+    description: 'Whether to create Source Distribution for this package using the sdist flag for build'
     required: false
     default: 'true'
-  bdist_wheel:
-    description: 'Whether to create Wheel Distribution for this package using the bdist_wheel flag for setup.py'
+  wheel:
+    description: 'Whether to create Wheel Distribution for this package using the wheel flag for build'
     required: false
     default: 'true'
 
@@ -94,7 +94,7 @@ runs:
         name: ${{ steps.assemble_release_name.outputs.release_name }}
 
     - if: inputs.build_ghpython_components == 'true'
-      uses: compas-dev/compas-actions.build@v3
+      uses: compas-dev/compas-actions.build@v4
       with:
         invoke_lint: true
         check_import: true
@@ -114,13 +114,12 @@ runs:
       if: inputs.publish_to_pypi == 'true'
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel twine
-        python setup.py clean --all
+        pip install build twine
         if [ "${{ inputs.sdist }}" == "true" ]; then
-          python setup.py sdist
+          python -m build --sdist
         fi
-        if [ "${{ inputs.bdist_wheel }}" == "true" ]; then
-          python setup.py bdist_wheel
+        if [ "${{ inputs.wheel }}" == "true" ]; then
+          python -m build --wheel
         fi
         twine check dist/*
         twine upload dist/* --skip-existing --verbose
