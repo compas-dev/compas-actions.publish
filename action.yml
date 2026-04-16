@@ -52,7 +52,7 @@ inputs:
     description: 'Whether to create Wheel Distribution for this package using the wheel flag for build'
     required: false
     default: 'true'
-  pre_build:
+  run_prebuild:
     description: 'Whether to run the pre-build task before publishing. For example, to create generated files that should be included in the wheel'
     required: false
     default: 'false'
