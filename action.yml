@@ -53,7 +53,7 @@ inputs:
     required: false
     default: 'true'
   run_prebuild:
-    description: 'Whether to run the pre-build task before publishing. For example, to create generated files that should be included in the wheel'
+    description: 'Whether to run the pre-build task before building. For example, to create generated files that should be included in the wheel'
     required: false
     default: 'false'
 
