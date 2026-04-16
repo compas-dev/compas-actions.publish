@@ -52,6 +52,10 @@ inputs:
     description: 'Whether to create Wheel Distribution for this package using the wheel flag for build'
     required: false
     default: 'true'
+  run_prebuild:
+    description: 'Whether to run the pre-build task before building. For example, to create generated files that should be included in the wheel'
+    required: false
+    default: 'false'
 
 runs:
   using: "composite"
@@ -94,7 +98,7 @@ runs:
         name: ${{ steps.assemble_release_name.outputs.release_name }}
 
     - if: inputs.build_ghpython_components == 'true'
-      uses: compas-dev/compas-actions.build@v4
+      uses: compas-dev/compas-actions.build@v5
       with:
         invoke_lint: true
         check_import: true
@@ -104,6 +108,7 @@ runs:
         gh_prefix: ${{ inputs.gh_prefix }}
         gh_interpreter: ${{ inputs.gh_interpreter }}
         python: ${{ inputs.python }}
+        run_prebuild: ${{ inputs.run_prebuild }}
       
     - if: inputs.build_ghpython_components == 'false'
       uses: actions/setup-python@v5
