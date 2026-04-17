@@ -111,9 +111,12 @@ runs:
         run_prebuild: ${{ inputs.run_prebuild }}
       
     - if: inputs.build_ghpython_components == 'false'
-      uses: actions/setup-python@v5
+      uses: compas-dev/compas-actions.build@v5
       with:
-        python-version: ${{ inputs.python }}
+        invoke_lint: false
+        check_import: false
+        python: ${{ inputs.python }}
+        run_prebuild: ${{ inputs.run_prebuild }}
 
     - shell: bash
       if: inputs.publish_to_pypi == 'true'
