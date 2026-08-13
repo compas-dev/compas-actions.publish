@@ -10,7 +10,7 @@ inputs:
     required: false
     default: 'true'
   pypi_token:
-    description: 'the PYPI account token'
+    description: 'The PyPI API token. Omit it to use Trusted Publishing.'
     required: false
     default: ''
   build_ghpython_components:
@@ -115,7 +115,8 @@ runs:
       with:
         python-version: ${{ inputs.python }}
 
-    - shell: bash
+    - name: Build distributions
+      shell: bash
       if: inputs.publish_to_pypi == 'true'
       run: |
         python -m pip install --upgrade pip
@@ -127,7 +128,19 @@ runs:
           python -m build --wheel
         fi
         twine check dist/*
+
+    - name: Publish distributions with an API token
+      shell: bash
+      if: inputs.publish_to_pypi == 'true' && inputs.pypi_token != ''
+      run: |
         twine upload dist/* --skip-existing --verbose
       env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ inputs.pypi_token }}
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ inputs.pypi_token }}
+
+    - name: Publish distributions with Trusted Publishing
+      if: inputs.publish_to_pypi == 'true' && inputs.pypi_token == ''
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        skip-existing: true
+        verbose: true
